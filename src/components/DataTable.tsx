@@ -77,6 +77,13 @@ const DataTable: React.FC = () => {
     }));
   };
 
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    setPage(newPage);
+  };
+
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -90,7 +97,7 @@ const DataTable: React.FC = () => {
   };
 
   const filteredUsers = users.filter((user) => {
-    const nameMatch = `${user.first_name} ${user.last_name}`
+    const nameMatch = `${user.last_name}`
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
     const emailMatch = user.email
@@ -98,13 +105,6 @@ const DataTable: React.FC = () => {
       .includes(searchQuery.toLowerCase());
     return nameMatch || emailMatch;
   });
-
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    setPage(newPage);
-  };
 
   return (
     <div>

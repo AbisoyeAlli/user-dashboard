@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://reqres.in/api";
+const BASE_URL = "https://reqres.in/api/users";
 
 export interface User {
   id: number;
@@ -19,7 +19,7 @@ export interface UpdatedUserData {
 
 export const fetchUsers = async (): Promise<User[]> => {
   try {
-    const response = await axios.get(`${BASE_URL}/users`);
+    const response = await axios.get(`${BASE_URL}`);
     const totalPages = response.data.total_pages;
     const pageRequests = Array.from({ length: totalPages }, (_, index) =>
       fetchUsersByPage(index + 1)
@@ -37,7 +37,7 @@ export const fetchUsers = async (): Promise<User[]> => {
 
 const fetchUsersByPage = async (page: number): Promise<User[]> => {
   try {
-    const response = await axios.get(`${BASE_URL}/users?page=${page}`);
+    const response = await axios.get(`${BASE_URL}?page=${page}`);
     return response.data.data as User[];
   } catch (error) {
     console.error(`Error fetching users for page ${page}:`);
