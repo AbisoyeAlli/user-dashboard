@@ -20,9 +20,28 @@ export interface UpdatedUserData {
 export const fetchUsers = async (): Promise<User[]> => {
   try {
     const response = await axios.get(`${BASE_URL}/users`);
+    const totalPages = response.data.total_pages;
+    const pageRequests = Array.from({ length: totalPages }, (_, index) =>
+      fetchUsersByPage(index + 1)
+    );
+    const pageData = await Promise.all(pageRequests);
+    const allUsers = pageData.reduce(
+      (acc, pageUsers) => acc.concat(pageUsers),
+      []
+    );
+    return allUsers;
+  } catch (error) {
+    throw new Error("Error fetching users.");
+  }
+};
+
+const fetchUsersByPage = async (page: number): Promise<User[]> => {
+  try {
+    const response = await axios.get(`${BASE_URL}/users?page=${page}`);
     return response.data.data as User[];
   } catch (error) {
-    throw new Error("Failed to fetch users.");
+    console.error(`Error fetching users for page ${page}:`);
+    throw new Error(`Error fetching users for page ${page}.`);
   }
 };
 
